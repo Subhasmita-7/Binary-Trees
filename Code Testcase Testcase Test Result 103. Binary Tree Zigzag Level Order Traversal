@@ -1,0 +1,56 @@
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]  //even level ones will get printed normally and odd level ones will get printed in reversed order.
+
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if(root == null){
+            return ans; 
+        }
+
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+
+        boolean even = true;
+        while(!q.isEmpty()){
+            LinkedList<Integer> lev = new LinkedList<>();
+            int len = q.size();
+            for(int i = 0 ; i< len ; i++){
+                TreeNode node = q.poll();
+
+                if(even){
+                    lev.addLast(node.val);
+                }
+                else{
+                    lev.addFirst(node.val);
+                }
+
+                if(node.left != null){
+                    q.add(node.left);
+                }
+                if(node.right != null){
+                    q.add(node.right);
+                }
+            }
+            even = !even;
+            ans.add(lev);
+        }
+        return ans;
+    }
+}
