@@ -1,0 +1,42 @@
+https://www.geeksforgeeks.org/dsa/morris-traversal-for-preorder/
+
+/*
+class Node {
+    int data;
+    Node left, right;
+    Node(int item){
+        data = item;
+        left = right = null;
+    }
+}
+*/
+
+class Solution {
+    ArrayList<Integer> preOrder(Node root) {
+        // code here
+        ArrayList<Integer> ans = new ArrayList<>();
+        while(root != null){
+            if(root.left == null){
+                ans.add(root.data);
+                root = root.right;
+            }
+            else{
+                Node curr = root.left;
+                while(curr.right != null && curr.right != root){
+                    curr = curr.right;
+                }
+                if(curr.right == root){
+                    curr.right = null;
+                    root = root.right;
+                }
+                else{
+                    ans.add(root.data);
+                    curr.right = root;
+                    root = root.left;
+                }
+            }
+            
+        }
+        return ans;
+    }
+}
