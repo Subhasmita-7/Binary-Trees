@@ -1,0 +1,46 @@
+https://www.geeksforgeeks.org/dsa/construct-a-binary-tree-from-postorder-and-inorder/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        int n = postorder.length;
+        int[] preIndex = {n-1};
+        Map<Integer , Integer > mp = new HashMap<>();
+
+        for(int i =0 ; i< n ; i++){
+            mp.put(inorder[i] , i);
+        }
+
+        return construct(mp , inorder , postorder , preIndex , 0 , n-1);
+    }
+
+    private TreeNode construct(Map<Integer, Integer> mp , int[] inorder , int[] postorder , int[] preIndex  , int left , int right){
+        if(left > right){
+            return null;
+        }
+
+        int val = postorder[preIndex[0]];
+        preIndex[0]--;
+
+        TreeNode root = new TreeNode(val);
+        int start = mp.get(val);
+
+        root.right = construct(mp , inorder, postorder, preIndex, start+1 , right);
+        root.left = construct(mp , inorder, postorder, preIndex , left , start-1);
+        return root;
+    }
+}
