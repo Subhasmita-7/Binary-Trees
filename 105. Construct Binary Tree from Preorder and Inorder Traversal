@@ -1,0 +1,46 @@
+https://www.geeksforgeeks.org/dsa/construct-tree-from-given-inorder-and-preorder-traversal/#expected-approach-1-using-preorder-traversal-and-hash-map-on-time-and-on-space
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> mp = new HashMap<>();
+        int[] preIndex = {0};
+
+        for(int i = 0 ; i<inorder.length ; i++){
+            mp.put(inorder[i] , i);
+        }
+
+        return construct(mp , preorder , preIndex , 0 , inorder.length - 1);
+    }
+
+    private TreeNode construct(Map<Integer , Integer> mp , int[] preorder , int[] index , int left , int right){
+        if(left > right){
+            return null;
+        }
+
+        int rootVal = preorder[index[0]];
+        TreeNode root = new TreeNode(rootVal);
+        index[0]++; 
+
+        int start = mp.get(rootVal);
+
+        root.left = construct(mp , preorder , index , left , start - 1);
+        root.right = construct(mp , preorder , index , start + 1 , right);
+
+        return root;
+    }
+}
